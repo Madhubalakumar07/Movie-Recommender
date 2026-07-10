@@ -1,0 +1,26 @@
+# Ignore dataset folder
+datasets/
+model/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore virtual environment
+venv/
+.venv/
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+
+# ==========================
+# Pickle Files
+# ==========================
+*.pickle
+
+*.pkl
+*.pickle
