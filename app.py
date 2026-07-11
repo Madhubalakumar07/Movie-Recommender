@@ -2,11 +2,21 @@ import streamlit as st
 import pickle
 import pandas as pd
 import requests
+import os
 from urllib.parse import quote_plus
 from pathlib import Path
 
-API_KEY = "d2dbcfd5"
 BASE_DIR = Path(__file__).resolve().parent
+
+
+def get_omdb_api_key():
+    try:
+        if "OMDB_API_KEY" in st.secrets:
+            return st.secrets["OMDB_API_KEY"]
+    except Exception:
+        pass
+
+    return os.getenv("OMDB_API_KEY", "")
 
 st.set_page_config(
     page_title="CineMatch",
@@ -26,7 +36,20 @@ def load_assets():
 
 @st.cache_data(show_spinner=False, ttl=24 * 60 * 60)
 def fetch_movie_details(title):
-    url = f"https://www.omdbapi.com/?t={quote_plus(title)}&apikey={API_KEY}&plot=short"
+    api_key = get_omdb_api_key()
+
+    if not api_key:
+        return {
+            "poster": None,
+            "plot": "Plot not available.",
+            "year": "Unknown",
+            "genre": "Unknown",
+            "rating": "N/A",
+            "runtime": "Unknown",
+            "director": "Unknown",
+        }
+
+    url = f"https://www.omdbapi.com/?t={quote_plus(title)}&apikey={api_key}&plot=short"
 
     try:
         response = requests.get(url, timeout=10)
