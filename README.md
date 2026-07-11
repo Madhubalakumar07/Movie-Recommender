@@ -171,7 +171,6 @@ streamlit run app.py
 - Watchlist Feature
 - User Ratings
 - Deploy using Docker
-- Replace CountVectorizer with TF-IDF for improved recommendations
 
 ---
 
