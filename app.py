@@ -5,6 +5,7 @@ import requests
 import os
 from urllib.parse import quote_plus
 from pathlib import Path
+from sklearn.metrics.pairwise import cosine_similarity
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -30,8 +31,9 @@ st.set_page_config(
 def load_assets():
     movies_dict = pickle.load(open(BASE_DIR / 'model' / 'movies.pkl', 'rb'))
     movies_data = pd.DataFrame(movies_dict)
-    similarity_matrix = pickle.load(open(BASE_DIR / 'model' / 'similarity.pkl', 'rb'))
-    return movies_data, similarity_matrix
+    vectors = pickle.load(open(BASE_DIR / 'model' / 'vectors.pkl', 'rb'))
+    # similarity_matrix = cosine_similarity(vectors)
+    return movies_data, vectors
 
 
 @st.cache_data(show_spinner=False, ttl=24 * 60 * 60)
@@ -79,7 +81,7 @@ def fetch_movie_details(title):
     }
 
 
-movies, similarity = load_assets()
+movies, vectors = load_assets()
 
 
 def recommend(movie, top_n=5):
@@ -89,7 +91,9 @@ def recommend(movie, top_n=5):
         return []
 
     movie_index = movie_matches[0]
-    distances = similarity[movie_index]
+    print(type(vectors))
+    print(vectors.shape)
+    distances = cosine_similarity(vectors[movie_index], vectors).flatten()
 
     recommendations = sorted(
         list(enumerate(distances)),

@@ -18,12 +18,3 @@ venv/
 
 # Ignore Jupyter notebooks checkpoints
 .ipynb_checkpoints/
-
-
-# ==========================
-# Pickle Files
-# ==========================
-*.pickle
-
-*.pkl
-*.pickle
