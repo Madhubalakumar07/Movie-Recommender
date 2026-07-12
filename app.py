@@ -11,13 +11,12 @@ BASE_DIR = Path(__file__).resolve().parent
 
 
 def get_omdb_api_key():
-    try:
-        if "OMDB_API_KEY" in st.secrets:
-            return st.secrets["OMDB_API_KEY"]
-    except Exception:
-        pass
+    api_key = os.getenv("OMDB_API_KEY")
 
-    return os.getenv("OMDB_API_KEY", "")
+    if api_key:
+        return api_key
+
+    return st.secrets["OMDB_API_KEY"]
 
 st.set_page_config(
     page_title="CineMatch",
